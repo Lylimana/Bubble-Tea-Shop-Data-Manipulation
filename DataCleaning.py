@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
+import string
 import csv
+
 
 # Importing raw bubble tea shop data.
 df1 = pd.read_csv("LondonBubbleTeaShopsDataset/BubbleTeaShopsDataset1.csv")
@@ -46,9 +48,9 @@ raw_df.columns
     # rllt__details - Type of store
     # yi40Hd - Rating
     # RDApEe - Number of ratings
-    # rllt__details 2 - location/price/closing and opening hours
-    # rllt__details 3 - location/price/closing and opening hours
-    # rllt__details 4 - location/price/closing and opening hours
+    # rllt__details 2 - location/price/phone_number/closing_hours/opening_hours
+    # rllt__details 3 - location/price/phone_number/closing_hours/opening_hours
+    # rllt__details 4 - location/price/phone_number/closing_hours/opening_hours
     # rllt__details 5 - open/closed
     # uDyWh - Text Reviews ???
     # uDyWh 2 - Products sold ???
@@ -76,6 +78,7 @@ raw_df.drop(drop_columns, inplace = True, axis = 1)
 
 raw_df.columns
 
+# Renaming Columns 
 raw_df = raw_df.rename(columns = {
                         'OSrXXb': 'shop_name', 
                         'rllt__details': 'type_of_store',
@@ -83,4 +86,10 @@ raw_df = raw_df.rename(columns = {
                         'RDApEe': 'number_of_ratings', 
                         })
 
+
 raw_df.head(100)
+
+raw_df['number_of_ratings'] = [ 
+        for ratings in raw_df['number_of_ratings']: 
+            
+     ]
