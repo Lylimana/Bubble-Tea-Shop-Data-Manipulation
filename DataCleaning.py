@@ -86,10 +86,9 @@ raw_df = raw_df.rename(columns = {
                         'RDApEe': 'number_of_ratings', 
                         })
 
+# Standardization 
 
-raw_df.head(100)
+# Standardizing "number_of_ratings columns"
+# Removing "()"" from "number_of_ratings"
+raw_df['number_of_ratings'] = raw_df['number_of_ratings'].str.slice(1,-1) 
 
-raw_df['number_of_ratings'] = [ 
-        for ratings in raw_df['number_of_ratings']: 
-            
-     ]
