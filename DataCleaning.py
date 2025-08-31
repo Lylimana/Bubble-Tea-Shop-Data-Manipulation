@@ -86,9 +86,27 @@ raw_df = raw_df.rename(columns = {
                         'RDApEe': 'number_of_ratings', 
                         })
 
+# Checking data types
+raw_df.dtypes
+    # shop_name - object 
+    # type_of_store - object
+    # ratings - float64
+    # number_of_ratings - object
+    # rllt_details 2 - object
+    # rllt_details 3 - object
+    # rllt_details 4 - object
+
 # Standardization 
 
 # Standardizing "number_of_ratings columns"
 # Removing "()"" from "number_of_ratings"
 raw_df['number_of_ratings'] = raw_df['number_of_ratings'].str.slice(1,-1) 
 
+# Changing floats to whole numbers.
+for number_ratings in raw_df['number_of_ratings']: 
+    if "K" in number_ratings:
+        raw_df[number_ratings] = (raw_df[number_ratings].str.slice(0,-2)) 
+    else: 
+        continue
+
+raw_df.head(100)
