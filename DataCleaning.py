@@ -96,17 +96,34 @@ raw_df.dtypes
     # rllt_details 3 - object
     # rllt_details 4 - object
 
+# Dropping null values
+raw_df = raw_df.dropna(subset ={'number_of_ratings'})
+
 # Standardization 
 
 # Standardizing "number_of_ratings columns"
 # Removing "()"" from "number_of_ratings"
-raw_df['number_of_ratings'] = raw_df['number_of_ratings'].str.slice(1,-1) 
 
-# Changing floats to whole numbers.
-for number_ratings in raw_df['number_of_ratings']: 
+raw_df['number_of_ratings'] = raw_df['number_of_ratings'].str.strip('()')
+    # raw_df['number_of_ratings'] = raw_df['number_of_ratings'].str.slice(1,-1) 
+
+
+# Changing values in 'number_of_ratings' with K to int
+
+    # Changing floats to whole numbers.
+        # mapping = {'K': '* 1e3'}
+        # raw_df['number_of_ratings'] = pd.eval(raw_df['number_of_ratings'].replace(mapping, regex = True))
+
+
+for number_ratings in raw_df['number_of_ratings']:
     if "K" in number_ratings:
-        raw_df[number_ratings] = (raw_df[number_ratings].str.slice(0,-2)) 
-    else: 
+    # This can also be used: if number_ratings[-1] == "K": 
+        raw_df.loc[raw_df['number_of_ratings'] == number_ratings, 'number_of_ratings'] = number_ratings[0:-1:2]+"00"
         continue
+    
+raw_df['number_of_ratings'] = raw_df['number_of_ratings'].astype(int)
+# If I find a better solution for this, I will replace it. 
+
+raw_df.dtypes
 
 raw_df.head(100)
