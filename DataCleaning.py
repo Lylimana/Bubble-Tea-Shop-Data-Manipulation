@@ -99,8 +99,11 @@ raw_df = raw_df.dropna(subset ={'number_of_ratings'})
 
 # Standardization 
 
-# Standardizing "number_of_ratings columns"
-# Removing "()"" from "number_of_ratings"
+# Removing · from 'type_of_store' Columns 
+raw_df['type_of_store'] = raw_df['type_of_store'].str.replace('·','')
+
+# Standardizing 'number_of_ratings columns'
+# Removing '()' from 'number_of_ratings'
 
 raw_df['number_of_ratings'] = raw_df['number_of_ratings'].str.strip('()')
     # raw_df['number_of_ratings'] = raw_df['number_of_ratings'].str.slice(1,-1) 
@@ -207,7 +210,19 @@ drop_columns_times = ['dot1', 'dot2','close','open', 'closing_times', 'opening_t
 
 raw_df.drop(drop_columns_times, inplace = True, axis = 1)
 
-# Removing · from 'type_of_store' Columns 
-raw_df['type_of_store'] = raw_df['type_of_store'].str.replace('·','')
+# Most values in the 'price' column use £, ££ and £££ to indicate cost of product. 
+# However, there are some values that give a range of '£1-10' which doesn't align with this. 
+# From doing some research a single £ indicates a budget friendly shop with low prices usually from £5 - 10 
+# And ££ indicates a mid range store and £££ for higher end 
+# I'll be replacing values with '£1-10' with a single '£'.
+
+# Changing '£1-10' values to £ in 'price' column
+for x in raw_df['price']: 
+    if x == '£1–10': 
+        raw_df.loc[raw_df['price'] == x, 'price'] = '£'
+        continue
+
+# Removing · from 'phone_number' Columns 
+raw_df['phone_number'] = raw_df['phone_number'].str.replace('·','')
 
 raw_df.head(100)
