@@ -108,9 +108,9 @@ raw_df['number_of_ratings'] = raw_df['number_of_ratings'].str.strip('()')
     # raw_df['number_of_ratings'] = raw_df['number_of_ratings'].str.slice(1,-1) 
 
 
-# Changing values in 'number_of_ratings' with K to int
+# Changing values in 'number_of_ratings' from objects with K to int
 
-    # Changing floats to whole numbers.
+    # my attempt to use regex to replace all the floats and convert to normal integers
         # mapping = {'K': '* 1e3'}
         # raw_df['number_of_ratings'] = pd.eval(raw_df['number_of_ratings'].replace(mapping, regex = True))
 
@@ -120,10 +120,84 @@ for number_ratings in raw_df['number_of_ratings']:
     # This can also be used: if number_ratings[-1] == "K": 
         raw_df.loc[raw_df['number_of_ratings'] == number_ratings, 'number_of_ratings'] = number_ratings[0:-1:2]+"00"
         continue
-    
+   
 raw_df['number_of_ratings'] = raw_df['number_of_ratings'].astype(int)
 # If I find a better solution for this, I will replace it. 
 
-raw_df.dtypes
+
+# Splitting values in 'rllt__details' columns 
+
+# Create new columns for values to be arranged into
+raw_df['closing_times'] = np.nan
+raw_df['opening_times'] = np.nan
+raw_df['price'] = np.nan
+raw_df['phone_number'] = np.nan
+raw_df['location'] = np.nan
+
+# Setting Columns data type to object
+raw_df['closing_times'] = raw_df['closing_times'].astype(object)
+raw_df['opening_times'] = raw_df['opening_times'].astype(object)
+raw_df['price'] = raw_df['price'].astype(object)
+raw_df['phone_number'] = raw_df['phone_number'].astype(object)
+raw_df['location'] = raw_df['location'].astype(object)
+
+# Setting Columns data type to str to allow for loops
+raw_df['rllt__details 2'] = raw_df['rllt__details 2'].astype(str)
+raw_df['rllt__details 3'] = raw_df['rllt__details 3'].astype(str)
+raw_df['rllt__details 4'] = raw_df['rllt__details 4'].astype(str)
+
+# Loop to funnel values into appropriate columns for each 'rllt__details' column
+for details in raw_df['rllt__details 2']:
+    if details == "null": 
+        continue
+    elif "Closes" in details:
+        raw_df.loc[raw_df['rllt__details 2'] == details, 'closing_times'] = details
+    elif "Opens" in details: 
+        raw_df.loc[raw_df['rllt__details 2'] == details, 'opening_times'] = details
+    elif "£" in details: 
+        raw_df.loc[raw_df['rllt__details 2'] == details, 'price'] = details
+    elif "07" in details:
+        raw_df.loc[raw_df['rllt__details 2'] == details, 'phone_number'] = details
+    elif "020" in details:
+        raw_df.loc[raw_df['rllt__details 2'] == details, 'phone_number'] = details
+    else:
+        raw_df.loc[raw_df['rllt__details 2'] == details, 'location'] = details
+      
+for details in raw_df['rllt__details 3']:
+    if details == "null": 
+        continue
+    elif "Closes" in details:
+        raw_df.loc[raw_df['rllt__details 3'] == details, 'closing_times'] = details
+    elif "Opens" in details: 
+        raw_df.loc[raw_df['rllt__details 3'] == details, 'opening_times'] = details
+    elif "£" in details: 
+        raw_df.loc[raw_df['rllt__details 3'] == details, 'price'] = details
+    elif "07" in details:
+        raw_df.loc[raw_df['rllt__details 3'] == details, 'phone_number'] = details
+    elif "020" in details:
+        raw_df.loc[raw_df['rllt__details 3'] == details, 'phone_number'] = details
+    else:
+        raw_df.loc[raw_df['rllt__details 3'] == details, 'location'] = details
+        
+for details in raw_df['rllt__details 4']:
+    if details == "null": 
+        continue
+    elif "Closes" in details:
+        raw_df.loc[raw_df['rllt__details 4'] == details, 'closing_times'] = details
+    elif "Opens" in details: 
+        raw_df.loc[raw_df['rllt__details 4'] == details, 'opening_times'] = details
+    elif "£" in details: 
+        raw_df.loc[raw_df['rllt__details 4'] == details, 'price'] = details
+    elif "07" in details:
+        raw_df.loc[raw_df['rllt__details 4'] == details, 'phone_number'] = details
+    elif "020" in details:
+        raw_df.loc[raw_df['rllt__details 4'] == details, 'phone_number'] = details
+    else:
+        raw_df.loc[raw_df['rllt__details 4'] == details, 'location'] = details
+
+# Dropping 'rllt__detail' columns 
+drop_column_details = ['rllt__details 2', 'rllt__details 3', 'rllt__details 4']
+        
+raw_df.drop(drop_column_details, inplace = True, axis = 1)
 
 raw_df.head(100)
