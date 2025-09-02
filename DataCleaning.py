@@ -25,9 +25,7 @@ raw_df = pd.concat(df_array)
 
     # Inital Data Exploration 
         # To understand the data im manipulating
-    # Data Proprocessing 
-
-
+    # Data Preprocessing 
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -199,5 +197,17 @@ for details in raw_df['rllt__details 4']:
 drop_column_details = ['rllt__details 2', 'rllt__details 3', 'rllt__details 4']
         
 raw_df.drop(drop_column_details, inplace = True, axis = 1)
+
+# Splitting 'closing_times' and 'opening_times' column to only have time 
+raw_df[['dot1', 'close','closing_time']] = raw_df['closing_times'].str.split(' ', n = 2, expand = True)
+raw_df[['dot2', 'open','opening_time']] = raw_df['opening_times'].str.split(' ', n = 2, expand = True)
+
+# Dropping unesscessary details columns 
+drop_columns_times = ['dot1', 'dot2','close','open', 'closing_times', 'opening_times']
+
+raw_df.drop(drop_columns_times, inplace = True, axis = 1)
+
+# Removing · from 'type_of_store' Columns 
+raw_df['type_of_store'] = raw_df['type_of_store'].str.replace('·','')
 
 raw_df.head(100)
