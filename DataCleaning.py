@@ -225,18 +225,26 @@ for x in raw_df['price']:
 
 # Changing 'closing_time' and 'opening_time' columns to more readable/manipulatable formats
 # Setting Columns data type to str to allow for loops
-# raw_df['closing_time'] = raw_df['closing_time'].astype("string")
+raw_df['closing_time'] = raw_df['closing_time'].astype(str)
 
-# for x in raw_df['closing_time']: 
+raw_df['closing_am/pm'] = np.nan
 
-# from datetime import datetime 
+for x in raw_df['closing_time']: 
+    if x[-2:] == 'pm': 
+        raw_df.loc[raw_df['closing_time'] == x, 'closing_am/pm'] = "pm"
+    elif x[-2:] == 'am':
+        raw_df.loc[raw_df['closing_time'] == x, 'closing_am/pm'] = "am"
+    continue
 
-# for x in raw_df['closing_time']: 
-#     if ':' in x: 
-#         raw_df.loc[raw_df['closing_time'] == x, 'closing_time'] = datetime.strptime(x, '%-I:%M %p')
-#     elif ':' not in x:  
-#         raw_df.loc[raw_df['closing_time'] == x, 'closing_time'] = datetime.strptime(x, '%-I %p')
-#     continue
+for x in raw_df['closing_time']: 
+    if x[-2:] == 'pm' or x[-2:] == 'am': 
+        raw_df.loc[raw_df['closing_time'] == x, 'closing_time'] = x[:-2]
+    continue
+
+for x in raw_df['closing_time']: 
+    if x != "None" and ':' not in x: 
+        raw_df.loc[raw_df['closing_time'] == x, 'closing_time'] = x + ":00"
+    continue
 
 # Removing · from 'phone_number' Columns 
 raw_df['phone_number'] = raw_df['phone_number'].str.replace('·','')
