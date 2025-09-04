@@ -19,7 +19,7 @@ df_array = [df1, df2, df3, df3, df4, df5, df6, df7, df8, df9]
 
 raw_df = pd.concat(df_array)
 
-# -----------------------------------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------------------
 
 # PLAN OF ACTIONS 
 
@@ -27,7 +27,7 @@ raw_df = pd.concat(df_array)
         # To understand the data im manipulating
     # Data Preprocessing 
 
-# -----------------------------------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------------------
 
 # INITIAL DATA EXPLORING 
 raw_df.head(100)
@@ -276,14 +276,6 @@ for x in raw_df['opening_time']:
         raw_df.loc[raw_df['opening_time'] == x, 'opening_time'] = x + ":00"
     continue
 
-
-# from datetime import datetime
-
-# for x in raw_df['closing_time']: 
-#     if x != "None": 
-#         raw_df.loc[raw_df['closing_time'] == x, 'closing_time'] = datetime.strptime(x, '%H:%M')
-#     continue
-
 # Removing · from 'phone_number' Columns 
 raw_df['phone_number'] = raw_df['phone_number'].str.replace('·','')
 raw_df['phone_number'] = raw_df['phone_number'].str.replace(' ','')
@@ -327,3 +319,40 @@ cleaned_data[[ 'shop_name',
 
 cleaned_data.head(100)
 # cleaned_data.dtypes
+
+# ----------------------------------------------------------------------------------------------------------------------------------
+
+# Data Exploration 
+print(cleaned_data.isnull().sum().sum())
+# Output: 
+    # 462
+
+print(cleaned_data.isnull().sum())
+# Output: 
+    # shop_name              0
+    # type_of_store          0
+    # ratings                0
+    # number_of_ratings      0
+    # price                140
+    # phone_number          64
+    # location               2
+    # closing_time           0
+    # closing_am/pm         68
+    # opening_time           0
+    # opening_am/pm        188
+    
+print(cleaned_data.isna().sum())
+# Output: 
+    # shop_name              0
+    # type_of_store          0
+    # ratings                0
+    # number_of_ratings      0
+    # price                140
+    # phone_number          64
+    # location               2
+    # closing_time           0
+    # closing_am/pm         68
+    # opening_time           0
+    # opening_am/pm        188
+    
+    
