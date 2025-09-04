@@ -129,23 +129,29 @@ raw_df['number_of_ratings'] = raw_df['number_of_ratings'].astype(int)
 # Splitting values in 'rllt__details' columns 
 
 # Create new columns for values to be arranged into
-raw_df['closing_times'] = np.nan
-raw_df['opening_times'] = np.nan
-raw_df['price'] = np.nan
-raw_df['phone_number'] = np.nan
-raw_df['location'] = np.nan
+    # raw_df['closing_times'] = np.nan
+    # raw_df['opening_times'] = np.nan
+    # raw_df['price'] = np.nan
+    # raw_df['phone_number'] = np.nan
+    # raw_df['location'] = np.nan
+    
+raw_df[['closing_times', 'opening_times','price', 'phone_number', 'location']] = np.nan
 
 # Setting Columns data type to object
-raw_df['closing_times'] = raw_df['closing_times'].astype(object)
-raw_df['opening_times'] = raw_df['opening_times'].astype(object)
-raw_df['price'] = raw_df['price'].astype(object)
-raw_df['phone_number'] = raw_df['phone_number'].astype(object)
-raw_df['location'] = raw_df['location'].astype(object)
+    # raw_df['closing_times'] = raw_df['closing_times'].astype(object)
+    # raw_df['opening_times'] = raw_df['opening_times'].astype(object)
+    # raw_df['price'] = raw_df['price'].astype(object)
+    # raw_df['phone_number'] = raw_df['phone_number'].astype(object)
+    # raw_df['location'] = raw_df['location'].astype(object)
+    
+raw_df[['closing_times', 'opening_times', 'price', 'phone_number', 'location']] = raw_df[['closing_times', 'opening_times', 'price', 'phone_number', 'location']].astype(object)
 
 # Setting Columns data type to str to allow for loops
-raw_df['rllt__details 2'] = raw_df['rllt__details 2'].astype(str)
-raw_df['rllt__details 3'] = raw_df['rllt__details 3'].astype(str)
-raw_df['rllt__details 4'] = raw_df['rllt__details 4'].astype(str)
+    # raw_df['rllt__details 2'] = raw_df['rllt__details 2'].astype(str)
+    # raw_df['rllt__details 3'] = raw_df['rllt__details 3'].astype(str)
+    # raw_df['rllt__details 4'] = raw_df['rllt__details 4'].astype(str)
+
+raw_df[['rllt__details 2','rllt__details 3','rllt__details 4']] = raw_df[['rllt__details 2','rllt__details 3','rllt__details 4']].astype(str)
 
 # Loop to funnel values into appropriate columns for each 'rllt__details' column
 for details in raw_df['rllt__details 2']:
@@ -225,6 +231,8 @@ for x in raw_df['price']:
 
 # Changing 'closing_time' and 'opening_time' columns to more readable/manipulatable formats
 # Setting Columns data type to str to allow for loops
+
+# Closing
 raw_df['closing_time'] = raw_df['closing_time'].astype(str)
 
 raw_df['closing_am/pm'] = np.nan
@@ -246,8 +254,76 @@ for x in raw_df['closing_time']:
         raw_df.loc[raw_df['closing_time'] == x, 'closing_time'] = x + ":00"
     continue
 
+# Opening 
+raw_df['opening_time'] = raw_df['opening_time'].astype(str)
+
+raw_df['opening_am/pm'] = np.nan
+
+for x in raw_df['opening_time']: 
+    if x[-2:] == 'pm': 
+        raw_df.loc[raw_df['opening_time'] == x, 'opening_am/pm'] = "pm"
+    elif x[-2:] == 'am':
+        raw_df.loc[raw_df['opening_time'] == x, 'opening_am/pm'] = "am"
+    continue
+
+for x in raw_df['opening_time']: 
+    if x[-2:] == 'pm' or x[-2:] == 'am': 
+        raw_df.loc[raw_df['opening_time'] == x, 'opening_time'] = x[:-2]
+    continue
+
+for x in raw_df['opening_time']: 
+    if x != "None" and ':' not in x: 
+        raw_df.loc[raw_df['opening_time'] == x, 'opening_time'] = x + ":00"
+    continue
+
+
+# from datetime import datetime
+
+# for x in raw_df['closing_time']: 
+#     if x != "None": 
+#         raw_df.loc[raw_df['closing_time'] == x, 'closing_time'] = datetime.strptime(x, '%H:%M')
+#     continue
+
 # Removing · from 'phone_number' Columns 
 raw_df['phone_number'] = raw_df['phone_number'].str.replace('·','')
 raw_df['phone_number'] = raw_df['phone_number'].str.replace(' ','')
 
-raw_df.head(100)
+# Rearrange columns 
+cleaned_data = raw_df[[ 'shop_name',
+                        'type_of_store',
+                        'ratings',
+                        'number_of_ratings',
+                        'price',
+                        'phone_number',
+                        'location',
+                        'closing_time',
+                        'closing_am/pm',
+                        'opening_time',
+                        'opening_am/pm'
+                       ]]
+
+# Changing data types of each column 
+    # cleaned_data['shop_name'] = cleaned_data['shop_name'].astype("string")
+    # cleaned_data['type_of_store'] = cleaned_data['type_of_store'].astype("string")
+    # cleaned_data['type_of_store'] = cleaned_data['type_of_store'].astype("string")
+    # cleaned_data['phone_number'] = cleaned_data['phone_number'].astype("string")
+    # cleaned_data['location'] = cleaned_data['location'].astype("string")
+    # cleaned_data['closing_am/pm'] = cleaned_data['closing_am/pm'].astype("string")
+    # cleaned_data['opening_am/pm'] = cleaned_data['opening_am/pm'].astype("string")
+
+cleaned_data[[ 'shop_name',
+                        'type_of_store',
+                        'phone_number',
+                        'location',
+                        'closing_am/pm',
+                        'opening_am/pm'
+                       ]] = cleaned_data[[ 'shop_name',
+                        'type_of_store',
+                        'phone_number',
+                        'location',
+                        'closing_am/pm',
+                        'opening_am/pm'
+                       ]].astype("string")
+
+cleaned_data.head(100)
+# cleaned_data.dtypes
