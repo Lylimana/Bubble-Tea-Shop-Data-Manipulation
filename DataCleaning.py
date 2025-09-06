@@ -317,9 +317,6 @@ cleaned_data[[ 'shop_name',
                         'opening_am/pm'
                        ]].astype("string")
 
-cleaned_data.head(100)
-# cleaned_data.dtypes
-
 # ----------------------------------------------------------------------------------------------------------------------------------
 
 # Data Exploration 
@@ -354,5 +351,19 @@ print(cleaned_data.isna().sum())
     # closing_am/pm         68
     # opening_time           0
     # opening_am/pm        188
-    
-    
+  
+# 'type_of_store' We would assume all values in this column would be 'bubble tea store' but in fact there are diferent values.
+# Checking values in 'type_of_store' 
+values_in_tos = cleaned_data['type_of_store'].tolist()
+
+# Running the code above produces all the values in 'type_of_store' - many values came back with empty spaces 
+# Removing empty spaces 
+cleaned_data['type_of_store'] = cleaned_data['type_of_store'].apply(lambda x: x.strip())
+
+# Checking all unique values in 'type_of_store'
+values_in_tos = cleaned_data['type_of_store'].unique()
+print(values_in_tos)
+
+    # ['Bubble tea store' 'Dessert restaurant' 'Tea room' 'Tea Shop'
+    #  'Dessert shop' 'Wholesaler' 'Cafe' 'Convenience Store' 'Shop'
+    #  'Ice cream shop' 'Internet cafe']
