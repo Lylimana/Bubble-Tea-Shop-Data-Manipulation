@@ -233,9 +233,8 @@ for x in raw_df['price']:
 # Setting Columns data type to str to allow for loops
 
 # Closing
+# raw_df['closing_am/pm'] = np.nan
 raw_df['closing_time'] = raw_df['closing_time'].astype(str)
-
-raw_df['closing_am/pm'] = np.nan
 
 for x in raw_df['closing_time']: 
     if x[-2:] == 'pm': 
@@ -255,9 +254,8 @@ for x in raw_df['closing_time']:
     continue
 
 # Opening 
+# raw_df['opening_am/pm'] = np.nan
 raw_df['opening_time'] = raw_df['opening_time'].astype(str)
-
-raw_df['opening_am/pm'] = np.nan
 
 for x in raw_df['opening_time']: 
     if x[-2:] == 'pm': 
@@ -360,10 +358,33 @@ values_in_tos = cleaned_data['type_of_store'].tolist()
 # Removing empty spaces 
 cleaned_data['type_of_store'] = cleaned_data['type_of_store'].apply(lambda x: x.strip())
 
-# Checking all unique values in 'type_of_store'
+# Checking all unique values in 'type_of_store' column
 values_in_tos = cleaned_data['type_of_store'].unique()
 print(values_in_tos)
 
     # ['Bubble tea store' 'Dessert restaurant' 'Tea room' 'Tea Shop'
     #  'Dessert shop' 'Wholesaler' 'Cafe' 'Convenience Store' 'Shop'
     #  'Ice cream shop' 'Internet cafe']
+    
+    # Will need to check individually if stores labelled anything but 'bubble tea store' actually serves bubble tea.
+    # But for now, all values that are not 'Bubble tea store' can be dropped
+    
+# cleaned_data.shape
+    # Output: 
+    # (191, 11)
+    
+# keeping rows where 'type of store' is 'Bubble tea store'
+    
+cleaned_data = cleaned_data[cleaned_data['type_of_store'] == 'Bubble tea store']
+
+cleaned_data.head(100)
+
+# cleaned_data.shape
+    # Output: 
+    # (168, 11)
+
+values_in_tos = cleaned_data['type_of_store'].unique()
+print(values_in_tos)
+
+# cleaned_data.dtypes
+cleaned_data.head(100)
