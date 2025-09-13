@@ -388,3 +388,7 @@ print(values_in_tos)
 
 # cleaned_data.dtypes
 cleaned_data.head(100)
+
+
+# Placing Dataset into excel file 
+cleaned_data.to_excel('Bubble Tea Dataset.xlsx', index = False)
