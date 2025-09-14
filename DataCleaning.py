@@ -377,18 +377,62 @@ print(values_in_tos)
     
 cleaned_data = cleaned_data[cleaned_data['type_of_store'] == 'Bubble tea store']
 
+# Converting addresses to coordinates using geopy
+from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut
+
+# Creating columns for latitude and longitude
+cleaned_data[['latitude', 'longitude']] = np.nan
+
+# Testing if coordinates locator works
+    # geolocator = Nominatim(user_agent="boba_tea_shop_coordinate_finder")
+    # location = geolocator.geocode("23 Powis St")
+    # print((location.latitude, location.longitude))
+
+# cleaned_data['boba_tea_shop_coordinate_finder'] = np.nan
+
+# for location in cleaned_data['location']: 
+#     if location != 'nan':   
+#         i = 0
+#         cleaned_data.loc[cleaned_data['location'] == location, 'boba_tea_shop_coordinate_finder'] = '%s%s' % ('boba_tea_shop_coordinate_finder', i )
+#     continue
+
+# for location in cleaned_data['location']:
+#     if location != "nan":
+#         geolocator = Nominatim(user_agent = cleaned_data.loc['boba_tea_shop_coordinate_finder'])
+#         coordinates = geolocator.geocode(location)
+#         cleaned_data.loc[cleaned_data['location'] == location, 'latitude'] = coordinates.latitude
+#         cleaned_data.loc[cleaned_data['location'] == location, 'latitude'] = coordinates.longitude
+#     continue
+
+# for location in cleaned_data['location']:
+#     if location != "nan":
+#         geolocator = Nominatim(user_agent='boba_tea_shop_coordinate_finder')
+#         coordinates = geolocator.geocode(location,timeout=10)
+#         cleaned_data.loc[cleaned_data['location'] == location, 'latitude'] = coordinates.latitude
+#         cleaned_data.loc[cleaned_data['location'] == location, 'latitude'] = coordinates.longitude
+#     continue
+
+def eval_results(x):
+    try: 
+        return (x.latitude, x.longitude)
+    except: 
+        return(None, None)
+
+for location in cleaned_data['location']:
+    if location != "nan":
+        geolocator = Nominatim(user_agent='boba_tea_shop_coordinate_finder')
+        cleaned_data[['latitude']] = cleaned_data['location'].apply(geolocator.geocode, timeout=10).apply(lambda x: eval_results(x))
+    continue
+
+
+
+# values_in_tos = cleaned_data['type_of_store'].unique()
+# print(values_in_tos)
+
+cleaned_data.dtypes
 cleaned_data.head(100)
 
-# cleaned_data.shape
-    # Output: 
-    # (168, 11)
 
-values_in_tos = cleaned_data['type_of_store'].unique()
-print(values_in_tos)
-
-# cleaned_data.dtypes
-cleaned_data.head(100)
-
-
-# Placing Dataset into excel file 
-cleaned_data.to_excel('Bubble Tea Dataset.xlsx', index = False)
+# # Placing Dataset into excel file 
+# cleaned_data.to_excel('Bubble Tea Dataset.xlsx', index = False)
