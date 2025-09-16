@@ -318,11 +318,11 @@ cleaned_data[[ 'shop_name',
 # ----------------------------------------------------------------------------------------------------------------------------------
 
 # Data Exploration 
-print(cleaned_data.isnull().sum().sum())
+# print(cleaned_data.isnull().sum().sum())
 # Output: 
     # 462
 
-print(cleaned_data.isnull().sum())
+# print(cleaned_data.isnull().sum())
 # Output: 
     # shop_name              0
     # type_of_store          0
@@ -336,7 +336,7 @@ print(cleaned_data.isnull().sum())
     # opening_time           0
     # opening_am/pm        188
     
-print(cleaned_data.isna().sum())
+# print(cleaned_data.isna().sum())
 # Output: 
     # shop_name              0
     # type_of_store          0
@@ -388,6 +388,18 @@ cleaned_data[['latitude', 'longitude']] = np.nan
     # geolocator = Nominatim(user_agent="boba_tea_shop_coordinate_finder")
     # location = geolocator.geocode("23 Powis St")
     # print((location.latitude, location.longitude))
+    
+# Dropping duplicate locations
+cleaned_data = cleaned_data.drop_duplicates('location')
+
+# Dropping rows with no address
+cleaned_data = cleaned_data.dropna(axis = 0, subset = 'location')
+
+# Dropping shops where locations are not addresses
+cleaned_data = cleaned_data.drop(cleaned_data[cleaned_data['location'] == 'Open'].index)
+cleaned_data = cleaned_data.drop(cleaned_data[cleaned_data['location'] == 'nan'].index) 
+cleaned_data = cleaned_data.drop(cleaned_data[cleaned_data['location'] == '⋅ 3 pm'].index) 
+cleaned_data = cleaned_data.drop(cleaned_data[cleaned_data['location'] == 'Temporarily closed'].index)
 
 # Finding coordinates for boba shop locations and adding it to latitude and longitude columns
 def eval_results(x):
@@ -399,7 +411,7 @@ def eval_results(x):
 for location in cleaned_data['location']:
     if location != "nan":
         geolocator = Nominatim(user_agent = 'manalili.mig@gmail.com')
-        cleaned_data.loc[cleaned_data['location'] == location, 'latitude'] = cleaned_data['location'].apply(geolocator.geocode, timeout=5).apply(lambda x: eval_results(x))
+        cleaned_data['latitude'] = cleaned_data['location'].apply(geolocator.geocode, timeout=5).apply(lambda x: eval_results(x))
     continue
 
 cleaned_data.dtypes
@@ -407,4 +419,4 @@ cleaned_data.head(100)
 
 
 # Placing Dataset into excel file 
-cleaned_data.to_excel('Bubble Tea Dataset.xlsx', index = False)
+# cleaned_data.to_excel('Bubble Tea Dataset.xlsx', index = False)
