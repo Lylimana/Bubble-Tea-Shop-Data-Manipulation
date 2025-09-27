@@ -85,8 +85,10 @@ raw_cleaned_data.dtypes
     # rllt_details 3 - object
     # rllt_details 4 - object
 
-# Dropping null values
+# Dropping null values with no ratings
+data_dropped_ratings = raw_cleaned_data['number_of_ratings'].isnull()
 raw_cleaned_data = raw_cleaned_data.dropna(subset ={'number_of_ratings'})
+
 
 # Standardization 
 
@@ -385,7 +387,9 @@ cleaned_data[['latitude', 'longitude', 'location1']] = np.nan
 cleaned_data = cleaned_data.drop_duplicates('location')
 
 # Dropping rows with no address
+data_dropped_location = cleaned_data['location'].isnull()
 cleaned_data = cleaned_data.dropna(axis = 0, subset = 'location')
+
 
 # Dropping shops where locations are not addresses
 cleaned_data = cleaned_data.drop(cleaned_data[cleaned_data['location'] == 'Open'].index)
@@ -435,14 +439,37 @@ values_in_dataset_start = raw_cleaned_data.shape
 Dataset_shape_comparisson = f"The shape of the dataset at the beginning {values_in_dataset_start} compared to the end {values_in_dataset_end}"
 
 print(Dataset_shape_comparisson)
-# Output: 
-    # The shape of the dataset at the beginning (191, 11) compared to the end (70, 8)
+'''
+Output: 
+    The shape of the dataset at the beginning (191, 11) compared to the end (70, 8)
 
-# After this prompt, I realised that too many shops have been removed. 
-# A reduction from 191 to 70. 
-# This would require further investigation to see what caused for all these values to be removed. 
-# I assume that this is a result of dropping rows will null values. 
+After this prompt, I realised that too many shops have been removed. 
+A reduction from 191 to 70. 
+This would require further investigation to see what caused for all these values to be removed. 
+I assume that this is a result of dropping rows will null values. 
+'''
 
+
+'''
+By searching "dropna" I identified the lines that could be resulting in multiple values being dropped: 
+
+On line 89 I found this: 
+
+# Dropping null values with no ratings
+raw_cleaned_data = raw_cleaned_data.dropna(subset ={'number_of_ratings'})
+
+On line 388 I have this: 
+
+# Dropping rows with no address
+cleaned_data = cleaned_data.dropna(axis = 0, subset = 'location')
+
+Now that we have this, we can determine how many columns where dropped by both actions
+'''
+
+dropped_ratings_shape = data_dropped_ratings.shape
+dropped_locations_shape = data_dropped_location.shape
+
+dropped_values_comparisson = f"Null values dropped from ratings: {dropped_ratings_shape} compared to dropped null locations: {dropped_locations_shape}"
 
 # Placing Dataset into excel file 
 # cleaned_data.to_excel('Bubble Tea Dataset.xlsx', index = False)
