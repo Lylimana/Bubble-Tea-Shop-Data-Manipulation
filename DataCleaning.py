@@ -17,17 +17,8 @@ cleaned_data9 = pd.read_csv("LondonBubbleTeaShopsDataset/BubbleTeaShopsDataset9.
 
 cleaned_data_array = [cleaned_data1, cleaned_data2, cleaned_data3, cleaned_data3, cleaned_data4, cleaned_data5, cleaned_data6, cleaned_data7, cleaned_data8, cleaned_data9]
 
+# Combining Datasets 
 raw_cleaned_data = pd.concat(cleaned_data_array)
-
-# ----------------------------------------------------------------------------------------------------------------------------------
-
-# PLAN OF ACTIONS 
-
-    # Inital Data Exploration 
-        # To understand the data im manipulating
-    # Data Preprocessing 
-
-# ----------------------------------------------------------------------------------------------------------------------------------
 
 # INITIAL DATA EXPLORING 
 raw_cleaned_data.head(100)
@@ -436,7 +427,22 @@ columns_to_drop = ['type_of_store','location','closing_time','closing_am/pm','op
 
 cleaned_data = cleaned_data.drop(columns_to_drop, axis = 1)
 
-cleaned_data.head(100)
+# Checking dataset shape to see how many values left compared to start
+values_in_dataset_end = cleaned_data.shape
+
+values_in_dataset_start = raw_cleaned_data.shape
+
+Dataset_shape_comparisson = f"The shape of the dataset at the beginning {values_in_dataset_start} compared to the end {values_in_dataset_end}"
+
+print(Dataset_shape_comparisson)
+# Output: 
+    # The shape of the dataset at the beginning (191, 11) compared to the end (70, 8)
+
+# After this prompt, I realised that too many shops have been removed. 
+# A reduction from 191 to 70. 
+# This would require further investigation to see what caused for all these values to be removed. 
+# I assume that this is a result of dropping rows will null values. 
+
 
 # Placing Dataset into excel file 
 # cleaned_data.to_excel('Bubble Tea Dataset.xlsx', index = False)
