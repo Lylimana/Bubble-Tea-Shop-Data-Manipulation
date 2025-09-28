@@ -70,13 +70,33 @@ Upon some initial investigation, this is what I found:
 
 # Dropping unecessary columns 
 
-# Creating function to if need to drop more columns in the future.
-def columns_to_drop(df, columns): 
+# Creating function to drop columns in case more columns would need to be drop in the future
+def drop_columns(df, columns): 
     df = df.drop(columns, axis = 1)
     return df
 
-columns_to_drop_arr = ['rllt__details', 'rllt__details 5', 'uDyWh 2', 'BSaJxc', 'UbRuwe']
+columns_to_drop = ['rllt__details', 'rllt__details 5', 'uDyWh 2', 'BSaJxc', 'UbRuwe']
 
-columns_to_drop(df, columns_to_drop_arr)
+df = drop_columns(df, columns_to_drop)
+
+# Adding new columns 
+df[['Address', 'Price', 'Phone number', 'Opening Times', 'Closing Times']] = np.nan
+
+# Renaming existing columns
+df = df.rename(columns = 
+    {'OSrXXb': 'Shop Name',
+    'yi40Hd': 'Rating',
+    'RDApEe': 'Number of Ratings',
+    'rllt__details 2': 'Details1',
+    'rllt__details 3': 'Details2',
+    'rllt__details 4': 'Details3',
+    'rllt__details 5': 'Details4',
+    'rllt__details 6': 'Details5',
+    'uDyWh 3': 'Details7',
+    'uDyWh': 'Review',
+    'yYlJEf href': 'Link',
+    'yYlJEf href 2': 'Directions',
+    }
+    )
 
 df.head()
