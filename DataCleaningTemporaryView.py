@@ -90,13 +90,60 @@ df = df.rename(columns =
     'rllt__details 2': 'Details1',
     'rllt__details 3': 'Details2',
     'rllt__details 4': 'Details3',
-    'rllt__details 5': 'Details4',
-    'rllt__details 6': 'Details5',
-    'uDyWh 3': 'Details7',
+    'rllt__details 6': 'Details4',
+    'uDyWh 3': 'Details5',
     'uDyWh': 'Review',
     'yYlJEf href': 'Link',
     'yYlJEf href 2': 'Directions',
     }
     )
+
+# Checking columns data types
+df.dtypes
+
+# Changing column datatypes to str
+df[['Details1','Details2','Details3','Details4','Details5']] = df[['Details1','Details2','Details3','Details4','Details5']].astype(str)
+
+df[['Closing Times','Opening Times','Price','Phone number','Address']] = df[['Closing Times','Opening Times','Price','Phone number','Address']].astype(str)
+
+# Filtering values based on their contents: 'Address', 'Price', 'Phone number', 'Opening Times', 'Closing Times'
+def column_filter(df, column):
+    for value in df[column]:
+        if value == "null": 
+            continue
+        elif "Closes" in value:
+            df.loc[df[column] == value, 'Closing Times'] = value
+        elif "Opens" in value: 
+            df.loc[df[column] == value, 'Opening Times'] = value
+        elif "£" in value: 
+            df.loc[df[column] == value, 'Price'] = value
+        elif "07" in value:
+            df.loc[df[column] == value, 'Phone number'] = value
+        elif "020" in value:
+            df.loc[df[column] == value, 'Phone number'] = value
+        else:
+            df.loc[df[column] == value, 'Address'] = value
+    return df
+
+# Creating array for columns that need to be filtered
+details = ['Details1','Details2','Details3','Details4', 'Details5']
+
+# Calling column filter function on details array 
+df = column_filter(df, details[0])
+
+df = column_filter(df, details[1])
+
+df = column_filter(df, details[2])
+
+df = column_filter(df, details[3])
+
+df = column_filter(df, details[4])
+
+df.head()
+
+# Dropping unecessary columns
+columns_to_drop2 = ['Details1','Details2','Details3','Details4', 'Details5']
+
+df = drop_columns(df, columns_to_drop2)
 
 df.head()
