@@ -108,42 +108,35 @@ df[['Closing Times','Opening Times','Price','Phone number','Address']] = df[['Cl
 
 # Filtering values based on their contents: 'Address', 'Price', 'Phone number', 'Opening Times', 'Closing Times'
 def column_filter(df, column):
-    for value in df[column]:
-        if value == "null": 
-            continue
-        elif "Closes" in value:
-            df.loc[df[column] == value, 'Closing Times'] = value
-        elif "Opens" in value: 
-            df.loc[df[column] == value, 'Opening Times'] = value
-        elif "£" in value: 
-            df.loc[df[column] == value, 'Price'] = value
-        elif "07" in value:
-            df.loc[df[column] == value, 'Phone number'] = value
-        elif "020" in value:
-            df.loc[df[column] == value, 'Phone number'] = value
-        else:
-            df.loc[df[column] == value, 'Address'] = value
+    for i in column: 
+        for value in df[column[column.index(i)]]:
+            if value == "nan": 
+                continue
+            elif "Closes" in value:
+                df.loc[df[column[column.index(i)]] == value, 'Closing Times'] = value
+            elif "Opens" in value: 
+                df.loc[df[column[column.index(i)]] == value, 'Opening Times'] = value
+            elif "£" in value: 
+                df.loc[df[column[column.index(i)]] == value, 'Price'] = value
+            elif "07" in value:
+                df.loc[df[column[column.index(i)]] == value, 'Phone number'] = value
+            elif "020" in value:
+                df.loc[df[column[column.index(i)]] == value, 'Phone number'] = value
+            else:
+                df.loc[df[column[column.index(i)]] == value, 'Address'] = value
     return df
 
 # Creating array for columns that need to be filtered
 details = ['Details1','Details2','Details3','Details4', 'Details5']
 
 # Calling column filter function on details array 
-df = column_filter(df, details[0])
+df = column_filter(df, details)
 
-df = column_filter(df, details[1])
-
-df = column_filter(df, details[2])
-
-df = column_filter(df, details[3])
-
-df = column_filter(df, details[4])
-
-df.head()
+df.head(100)
 
 # Dropping unecessary columns
 columns_to_drop2 = ['Details1','Details2','Details3','Details4', 'Details5']
 
 df = drop_columns(df, columns_to_drop2)
 
-df.head()
+df.head(100)
