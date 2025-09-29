@@ -101,6 +101,9 @@ df = df.rename(columns =
 # Checking columns data types
 df.dtypes
 
+# Dropping null values 
+df.dropna(subset = ['Shop Name'], inplace = True)
+
 # Changing column datatypes to str
 df[['Details1','Details2','Details3','Details4','Details5']] = df[['Details1','Details2','Details3','Details4','Details5']].astype(str)
 
@@ -132,11 +135,34 @@ details = ['Details1','Details2','Details3','Details4', 'Details5']
 # Calling column filter function on details array 
 df = column_filter(df, details)
 
-df.head(100)
-
 # Dropping unecessary columns
 columns_to_drop2 = ['Details1','Details2','Details3','Details4', 'Details5']
 
 df = drop_columns(df, columns_to_drop2)
 
-df.head(100)
+# Editing column values so that the can be manipulated in data visualizations
+
+# Shop Name 
+df['Shop Name'] = df['Shop Name'].astype(str)
+
+# Rating 
+
+# Number of Ratings
+df['Number of Ratings'] = df['Number of Ratings'].astype(str)
+
+df['Number of Ratings'] = df['Number of Ratings'].str.strip('()')
+
+for ratings in df['Number of Ratings']:
+    if "K" in ratings: 
+        df.loc[df['Number of Ratings'] == ratings, 'Number of Ratings'] = ratings[0:-1:2]+"00"
+        continue
+   
+df['Number of Ratings'] = df['Number of Ratings'].astype(int)
+
+# Review
+
+# Link 
+
+# Directions 
+
+# Address 
