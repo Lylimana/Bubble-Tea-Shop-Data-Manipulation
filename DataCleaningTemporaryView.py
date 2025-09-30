@@ -166,3 +166,33 @@ df['Number of Ratings'] = df['Number of Ratings'].astype(int)
 # Directions 
 
 # Address 
+# Converting addresses to coordinates
+from geopy.geocoders import Nominatim 
+from geopy.extra.rate_limiter import RateLimiter 
+
+df[['Latitude', 'Longitude', 'Location']] = np.nan
+
+# Creating function to drop null values in a column
+def drop_null_in_column(df, column): 
+    df = df.dropna(axis = 0, subset = column)
+    return df 
+
+df = drop_null_in_column(df, 'Address')
+
+# Checking if there are any null values in Address column 
+print(df['Address'].isnull().sum())
+
+# Checking all unique values in Address to ensure they are all addresses 
+df['Address'].unique()
+
+# Creating a function to replace wrong values with null 
+def replace_with_null(df, column, values):
+    for value in values:
+        df.loc[df[column] == value, column] = 'null'
+    return df
+    
+values_to_replace = ['Open', 'Open now','· 0330 043 4006','Temporarily closed', 'places', 'teas']
+
+df = replace_with_null(df, 'Address', values_to_replace)
+
+df['Address'].unique()
