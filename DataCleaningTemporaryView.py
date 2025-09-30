@@ -191,8 +191,18 @@ def replace_with_null(df, column, values):
         df.loc[df[column] == value, column] = 'null'
     return df
     
-values_to_replace = ['Open', 'Open now','· 0330 043 4006','Temporarily closed', 'places', 'teas']
+values_to_replace = ['Open', 'Open now','· 0330 043 4006','Temporarily closed', 'places', 'teas','⋅ 3 pm']
 
 df = replace_with_null(df, 'Address', values_to_replace)
 
 df['Address'].unique()
+
+# Finding coordinates for shop locations 
+geolocator = Nominatim(user_agent = 'manalili.mig@gmail.com')
+geocode = RateLimiter(geolocator.geocode, min_delay_seconds = 1)
+df['Location'] = df['Location'].apply(geocode)
+
+df['Latitude'] = df['Location'].apply(lambda loc: loc.latitude if loc else None)
+df['Longitude'] = df['Location'].apply(lambda loc: loc.longitude if loc else None)
+
+df.head(10)
