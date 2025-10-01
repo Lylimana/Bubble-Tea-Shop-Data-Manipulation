@@ -179,6 +179,9 @@ def drop_null_in_column(df, column):
 
 df = drop_null_in_column(df, 'Address')
 
+# Dropping duplicates from 'Address'
+df.drop_duplicates(subset = 'Address', keep ='first', inplace = False )
+
 # Checking if there are any null values in Address column 
 print(df['Address'].isnull().sum())
 
@@ -188,10 +191,10 @@ df['Address'].unique()
 # Creating a function to replace wrong values with null 
 def replace_with_null(df, column, values):
     for value in values:
-        df.loc[df[column] == value, column] = 'null'
+        df.loc[df[column] == value, column] = ''
     return df
     
-values_to_replace = ['Open', 'Open now','· 0330 043 4006','Temporarily closed', 'places', 'teas','⋅ 3 pm']
+values_to_replace = ['Open', 'Open now','· 0330 043 4006','Temporarily closed', 'places', 'teas','⋅ 3 pm', 'nan', 'bubble tea']
 
 df = replace_with_null(df, 'Address', values_to_replace)
 
@@ -216,7 +219,7 @@ columns_to_strip = ['Phone number', 'Opening Times', 'Closing Times']
 for column in columns_to_strip: 
     df[column] = df[column].str.strip('·⋅')
     
-
+df['Address'].value_counts()
     
 # Exporting data to excel file 
 df.to_excel('Cleaned Dataset.xlsx', index = False)
