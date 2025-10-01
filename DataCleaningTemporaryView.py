@@ -200,9 +200,23 @@ df['Address'].unique()
 # Finding coordinates for shop locations 
 geolocator = Nominatim(user_agent = 'manalili.mig@gmail.com')
 geocode = RateLimiter(geolocator.geocode, min_delay_seconds = 1)
-df['Location'] = df['Location'].apply(geocode)
+df['Location'] = df['Address'].apply(geocode)
 
 df['Latitude'] = df['Location'].apply(lambda loc: loc.latitude if loc else None)
 df['Longitude'] = df['Location'].apply(lambda loc: loc.longitude if loc else None)
 
-df.head(10)
+# Checking for null values in 'Location' column 
+df['Location'].isnull().sum()
+
+# Phone number/Opening Times/Closing Times
+df[['Phone number', 'Opening Times', 'Closing Times']] = df[['Phone number', 'Opening Times', 'Closing Times']].astype(str)
+
+columns_to_strip = ['Phone number', 'Opening Times', 'Closing Times']
+
+for column in columns_to_strip: 
+    df[column] = df[column].str.strip('·⋅')
+    
+
+    
+# Exporting data to excel file 
+df.to_excel('Cleaned Dataset.xlsx', index = False)
