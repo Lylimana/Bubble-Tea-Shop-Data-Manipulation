@@ -211,6 +211,9 @@ df['Longitude'] = df['Location'].apply(lambda loc: loc.longitude if loc else Non
 # Checking for null values in 'Location' column 
 df['Location'].isnull().sum()
 
+# Price 
+df['Price'].unique()
+
 # Phone number/Opening Times/Closing Times
 df[['Phone number', 'Opening Times', 'Closing Times']] = df[['Phone number', 'Opening Times', 'Closing Times']].astype(str)
 
@@ -222,4 +225,16 @@ for column in columns_to_strip:
 df['Address'].value_counts()
     
 # Exporting data to excel file 
-df.to_excel('Cleaned Dataset.xlsx', index = False)
+# df.to_excel('Cleaned Dataset.xlsx', index = False)
+
+# Price 
+df['Price'].unique()
+
+# Creating a key for easy Price visualisation 
+for price in df['Price']: 
+    if price == '': 
+        df.loc[df['Price'] == price, 'Price'] = '£'
+    elif price == '': 
+        df.loc[df['Price'] == price, 'Price'] = '££'
+    continue
+
