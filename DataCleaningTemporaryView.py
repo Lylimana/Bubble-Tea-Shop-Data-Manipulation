@@ -236,5 +236,26 @@ df['Address'].value_counts()
 # Exporting data to excel file 
 df.to_excel('Cleaned Dataset.xlsx', index = False)
 
-df.head(100)
+'''
+After having cleaned the dataset, I have identified that there are many shops with null values. 
+
+The columns with important data that should not have missing values are 'Price' and 'Address'. 
+
+Price column give insight on the how much boba tea would cost for that location. 
+
+Address is used by geopy to find coordinates which we can use to map out the location in our data visualisation tools - PowerBi/Tableau. 
+
+The course of action for filling out this missing information would be to locate the provided stores and either get an address that can be used by geopy to create coordinates or to find coordinates and manually add them to the dataset. 
+
+As for the price, we can do the same thing. By searching the shop we can calculate the average of menu items and see if it falls into the range of £1-10 or £10-20 and then designate it the appropriate £ symbol. 
+
+Columns such as 'Opening Times' and 'Closing Times' are less relevant as we have provided links to most shops websites. 
+However, for a better visualisation, it would be good to dig further for all shops and attempt to fill in these missing pieces of information. 
+
+Something to note when cleaning this data was that a better way to rank stores is based of their number of ratings in tandem with their rating. 
+Some stores may have a higher rating but with less ratings compared to others. 
+A solution to this is to do weightings. 
+
+I'll do further research into this to find the best optimal solution before creating a column that houses this information. 
+'''
 
